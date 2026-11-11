@@ -322,6 +322,16 @@ rt{font-size:max(.52em,9px);font-weight:700;letter-spacing:0;text-shadow:none}
 .rBtns.one{grid-template-columns:1fr;max-width:420px;margin:14px auto 6px}
 .node.lock{filter:grayscale(.8);cursor:default}.node.lock:hover{transform:none;background:linear-gradient(120deg,rgba(7,13,23,.97) 45%,var(--th2))}
 .sample small{font-size:11px;color:var(--mu);letter-spacing:0}
+
+/* ---- 答え方「ひらがなで書く」。画面の キーボードに かくれないよう、上に 置く ---- */
+#kana{position:absolute;left:50%;transform:translateX(-50%);top:8px;width:min(480px,54vw);display:none;gap:6px;pointer-events:auto}
+#kanaIn{flex:1;min-width:0;height:52px;background:rgba(3,8,15,.92);border:2px solid var(--c);color:#fff;font:900 26px/1 'BIZ UDGothic','Noto Sans JP','Hiragino Sans','Yu Gothic UI','Meiryo',sans-serif;text-align:center;padding:0 10px;user-select:text;-webkit-user-select:text;border-radius:0;outline:none;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+#kanaIn::placeholder{color:#6f879c;font-size:15px;font-weight:700}
+#kanaIn:focus{border-color:var(--y);box-shadow:0 0 18px rgba(255,209,102,.35)}
+#kana.bad #kanaIn{border-color:var(--r);background:rgba(60,8,16,.92)}
+.kanaClear{flex:none;min-width:58px;height:52px;border:1px solid var(--y);background:#1a1606;color:var(--y);font-weight:900}
+@media (orientation:portrait) and (max-width:700px){#kana{top:62px;width:min(480px,92vw)}}
+.seg.inputs b{font-family:inherit}
 </style>
 <meta name="robots" content="noindex,nofollow">
 <style>.room-invite,.goji-hashi,.goji-seo-line,#goji-door{display:none!important}.goji-kids-tag{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;background:var(--t2,#e6efd9);color:var(--ink,#273b31);font-size:13px;font-weight:700;vertical-align:middle}</style>
@@ -334,6 +344,7 @@ rt{font-size:max(.52em,9px);font-weight:700;letter-spacing:0;text-shadow:none}
   <button id="btnOd" class="gbtn" data-act="od" tabindex="-1">OVERDRIVE<kbd>Space</kbd><i id="odFill"></i></button>
   <div id="picks"></div>
   <div id="tiles"></div>
+  <div id="kana"><input id="kanaIn" type="text" lang="ja" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="ここに ひらがなで よみを かく" aria-label="読みをひらがなで書く"><button class="kanaClear" data-act="kanaClear" tabindex="-1">けす</button></div>
 </div>
 <div id="screen"></div>
 <script>(function(){document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;var u;try{u=new URL(a.href,location.href)}catch(_){return}if(u.protocol==='blob:'||u.protocol==='data:'||u.protocol==='javascript:')return;if(u.origin!==location.origin||u.pathname.indexOf(location.pathname)!==0){e.preventDefault();e.stopPropagation()}},true);var o=window.open;window.open=function(u){try{var x=new URL(u,location.href);if(x.origin!==location.origin)return null}catch(_){}return o.apply(window,arguments)}})();</script><script>
@@ -6065,7 +6076,7 @@ var LL = (function () {
   // 「数|え:かぞ」は「数」の次が「え」のときの読み
   var RUBY_SRC = "作戦地図:さくせんちず 先頭部隊:せんとうぶたい 守備隊員:しゅびたいいん 完全解読:かんぜんかいどく 最終防衛線:さいしゅうぼうえいせん 漢字防衛戦:かんじぼうえいせん 青山龍星:あおやまりゅうせい 一時停止:いちじていし 作戦説明:さくせんせつめい 全学年:ぜんがくねん 小学校:しょうがっこう " +
     "再訓練:さいくんれん 未発見:みはっけん 訓練生:くんれんせい 防衛戦:ぼうえいせん 一度:いちど 今日:きょう 以上:いじょう 伝令:でんれい 伝説:でんせつ 作戦:さくせん 保存:ほぞん 先生:せんせい 全員:ぜんいん 全部:ぜんぶ 出動:しゅつどう 同時:どうじ 問題:もんだい 宝物:たからもの 小学:しょうがく 心音:しんおん 意味:いみ 接近:せっきん 文字:もじ 方向:ほうこう 最初:さいしょ 最強:さいきょう 最後:さいご 最高:さいこう 本当:ほんとう 機械:きかい 武者:むしゃ 漢字:かんじ 石板:せきばん 端末:たんまつ 自分:じぶん 自己:じこ 見張:みは 解読:かいどく 言葉:ことば 記録:きろく 設定:せってい 警報:けいほう 開始:かいし 音楽:おんがく 一番:いちばん 地図:ちず 結果:けっか 説明:せつめい 学年:がくねん " +
-    "数|え:かぞ 消|え:き 正|し:ただ 習|っ:なら 受|け:う 取|っ:と 配|る:くば 流|れ:なが 分|か:わ 上:あ 下:さ 人:ひと 作:つく 使:つか 倍:ばい 先:さき 光:ひかり 切:き 前:まえ 力:ちから 助:たす 友:とも 同:おな 問:と 回:かい 声:こえ 変:か 大:おお 字:じ 守:まも 少:すこ 年:ねん 引:ひ 当:あ 打:う 数:かず 方:かた 来:く 次:つぎ 止:と 残:のこ 消:け 減:へ 満:まん 点:てん 番:ばん 目:め 直:なお 確:たし 秒:びょう 答:こた 絵:え 線:せん 街:まち 表:ひょう 見:み 話:はな 語:ご 読:よ 身:み 近:ちか 返:かえ 通:とお 速:はや 遊:あそ 遠:とお 開:ひら 間:あいだ 隊:たい 集:あつ 音:おと 順:じゅん 高:たか 中:ちゅう 続:つづ 全:ぜん 戦:せん 進:すす 具合:ぐあい 教科書:きょうかしょ 学期:がっき 語数:ごすう 教材:きょうざい 学習用:がくしゅうよう 教育出版:きょういくしゅっぱん 名前:なまえ 習:なら 決:き 終:お 配:くば 長:なが";
+    "数|え:かぞ 消|え:き 正|し:ただ 習|っ:なら 受|け:う 取|っ:と 配|る:くば 流|れ:なが 分|か:わ 上:あ 下:さ 人:ひと 作:つく 使:つか 倍:ばい 先:さき 光:ひかり 切:き 前:まえ 力:ちから 助:たす 友:とも 同:おな 問:と 回:かい 声:こえ 変:か 大:おお 字:じ 守:まも 少:すこ 年:ねん 引:ひ 当:あ 打:う 数:かず 方:かた 来:く 次:つぎ 止:と 残:のこ 消:け 減:へ 満:まん 点:てん 番:ばん 目:め 直:なお 確:たし 秒:びょう 答:こた 絵:え 線:せん 街:まち 表:ひょう 見:み 話:はな 語:ご 読:よ 身:み 近:ちか 返:かえ 通:とお 速:はや 遊:あそ 遠:とお 開:ひら 間:あいだ 隊:たい 集:あつ 音:おと 順:じゅん 高:たか 中:ちゅう 続:つづ 全:ぜん 戦:せん 進:すす 具合:ぐあい 教科書:きょうかしょ 学期:がっき 語数:ごすう 教材:きょうざい 学習用:がくしゅうよう 教育出版:きょういくしゅっぱん 名前:なまえ 手書:てが 入力:にゅうりょく 習:なら 決:き 終:お 配:くば 長:なが";
   var RUBY = RUBY_SRC.split(" ").map(function (x) {
     var p = x.split(":"), b = p[0].split("|");
     return { b: b[0], la: b[1] || "", r: p[1] };
@@ -6205,7 +6216,7 @@ var LL = (function () {
     if (!s || typeof s !== "object") return d;
     Object.keys(d).forEach(function (k) { if (s[k] === undefined || s[k] === null || typeof s[k] !== typeof d[k]) s[k] = d[k]; });
     if (!LL.DIFFS[s.diff]) s.diff = "guard";
-    if (s.input !== "key" && s.input !== "pick" && s.input !== "tile") s.input = "key";
+    if (s.input !== "key" && s.input !== "pick" && s.input !== "tile" && s.input !== "kana") s.input = "key";
     if (LL.GRADES.indexOf(s.grade) < 0) s.grade = 5;
     if (Array.isArray(s.range)) s.range = {};
     Object.keys(s.range).forEach(function (g) { var r = s.range[g]; if (!LL.kanji[g] || !r || typeof r.k !== "string" || !r.k.length) delete s.range[g]; });
@@ -6336,6 +6347,8 @@ var LL = (function () {
   function approachTime(G, q, conc) {
     var d = G.diff, ease = LL.GRADE_EASE[G.grade] || 1;
     if (G.input === "pick") return (d.pick + 1.5) * ease;
+    // ひらがなを 手で 書くのは、キーを 打つより ずっと 時間が かかる。1字ごとに 長めに 待つ
+    if (G.input === "kana") return (d.recog + Math.min(q.y.length, 7) * d.perKey * 2.6 + (conc > 1 ? 0.8 * (conc - 1) : 0)) * ease;
     return (d.recog + Math.min(q.keys, 11) * d.perKey + (conc > 1 ? 0.8 * (conc - 1) : 0)) * ease;
   }
   function accelMul(G) { return 1 + 0.06 * G.acc; }
@@ -6591,6 +6604,28 @@ var LL = (function () {
       return "wrong";
     }
     emit(G, "tap", { e: e, n: e.tin.length });
+    return "ok";
+  };
+  // ひらがなで 書く（手書きの 入力や、かなの キーボード）。text は いま 枠に 入っている かな。
+  // 終わりの ならびが、来ている 字の どれかの 読みと 同じなら 止まる（長い 読みを 先に、同じ 長さなら 近い字を 先に）。
+  // commit は Enter などで「これで 決める」と した とき。合わなければ まちがいに なる
+  LL.kana = function (G, text, commit) {
+    if (G.over || G.paused || (G.phase !== "wave" && G.phase !== "boss") || G.input !== "kana") return "none";
+    text = String(text || "");
+    var list = G.active.slice().sort(function (a, b) { return a.z - b.z; }), best = null, bestLen = 0;
+    list.forEach(function (e) {
+      [e.q.y].concat(e.q.a).forEach(function (y) {
+        if (y.length > bestLen && text.length >= y.length && text.slice(-y.length) === y) { best = e; bestLen = y.length; }
+      });
+    });
+    if (best) { decode(G, best); return "done"; }
+    if (commit && text.length) {
+      var e0 = list[0] || null;
+      G.combo = 0;
+      if (e0) e0.z = Math.max(0.02, e0.z - 0.05);
+      emit(G, "wrong", { e: e0 });
+      return "wrong";
+    }
     return "ok";
   };
   LL.tileBack = function (G) {
@@ -7031,6 +7066,10 @@ var ART = (function () {
   var W = 1280, H = 720, DPR = 1, S0 = 660, HOR = 280, CX = 640, U = 1;
   function resize() {
     var w = Math.max(1, window.innerWidth), h = Math.max(1, window.innerHeight); // かくれた枠で 幅0になっても 絵を止めない
+    // 「ひらがなで書く」の 間は、画面の キーボードに かくれない 高さ（見えている 分）で 描く
+    var vv = window.visualViewport, kb = !!(vv && state === "game" && G && !G.over && G.input === "kana" && vv.height > 120 && vv.height < h - 40);
+    if (kb) h = Math.round(vv.height);
+    cv.style.height = kb ? h + "px" : ""; gameUi.style.height = kb ? h + "px" : ""; gameUi.style.bottom = kb ? "auto" : "";
     DPR = Math.min(window.devicePixelRatio || 1, 1.25) * quality;
     if (w * DPR > 1400) DPR = 1400 / w;
     cv.width = Math.round(w * DPR); cv.height = Math.round(h * DPR);
@@ -7040,6 +7079,7 @@ var ART = (function () {
     skyCache = {};
   }
   window.addEventListener("resize", resize);
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", function () { resize(); if (state === "game" && G && G.input === "kana") window.scrollTo(0, 0); });
 
   var G = null, state = "title", theme = ART.THEMES[0], last = 0, T = 0, phase = 0;
   var shake = 0, redFlash = 0, whiteFlash = 0, cracks = [], chunks = [], sparks = [], pops = [], log = [], reveal = null, rings = [];
@@ -8076,7 +8116,7 @@ var ART = (function () {
     return "";
   }
   function drawHud(dt, threat, nearest, left) {
-    var m = 14 * U, portrait = W < H, i;
+    var m = 14 * U, portrait = W < H, i, kOff = G.input === "kana" ? (portrait ? 70 : 64) : 0;
     // シールド
     var sw = 38 * U, sh = 32 * U;
     panel(m, m, sw * 3 + 46 * U, sh + 38 * U);
@@ -8109,7 +8149,7 @@ var ART = (function () {
     // IMPACT の 秒読み
     if (nearest && (G.phase === "wave" || G.phase === "boss")) {
       var hot = left < 2, big = (hot ? 66 : 50) * U * (portrait ? 0.8 : 1);
-      var cy = (portrait ? 118 : 30) * U + big / 2;
+      var cy = (portrait ? 118 : 30) * U + big / 2 + kOff;
       if (hot && Math.floor(T * 8) % 2 === 0) c.globalAlpha = 0.72;
       txt("IMPACT", CX, cy - big / 2 - 4 * U, "800 " + 13 * U + "px " + NF, hot ? "#ff5a6e" : "#7ff3ff", "center", 4 * U);
       txt(Math.max(0, left).toFixed(2), CX, cy + 6 * U, "900 " + big + "px " + NF, hot ? "#ff3b4e" : "#fff", "center", 8 * U);
@@ -8137,7 +8177,7 @@ var ART = (function () {
     if (G.mode === "endless") txt("BEST " + (save.endless[G.grade] || 0), m, m + sh + 56 * U, "800 " + 14 * U + "px " + NF, "#ffd166", "left", 4 * U);
     // ボスの 体力（1語で 1ます）
     if (G.boss && G.phase === "boss") {
-      var bw = Math.min(W * 0.56, 560 * U), bx = CX - bw / 2, by = portrait ? 196 * U : 130 * U;
+      var bw = Math.min(W * 0.56, 560 * U), bx = CX - bw / 2, by = (portrait ? 196 * U : 130 * U) + kOff;
       var inf = ART.BOSS[G.boss.kind], seg = bw / G.bossMax;
       txt(inf.name, bx, by - 11 * U, "800 " + 14 * U + "px " + KF, inf.c, "left", 4 * U);
       txt(G.bossHP + " / " + G.bossMax, bx + bw, by - 11 * U, "800 " + 13 * U + "px " + NF, "#fff", "right", 4 * U);
@@ -8172,7 +8212,7 @@ var ART = (function () {
     // ヒント
     var he = hintMsg && hintMsg.e;
     if (he && G.active.indexOf(he) >= 0) {
-      var hy = H - (G.input !== "key" ? pickPanelH() : 80 * U) - 44 * U;
+      var hy = H - (G.input === "key" ? 80 * U : G.input === "kana" ? 24 * U : pickPanelH()) - 44 * U;
       var hs = he.hint === 1 ? "意味  " + he.q.m : he.hint === 2 ? he.q.w + " の読みは「" + he.q.y[0] + "」から" : he.q.w + " ＝ " + he.q.y + "（この語は数えない）";
       c.font = "800 " + 19 * U + "px " + KF;
       var hw = Math.min(W - 20, c.measureText(hs).width + 40 * U);
@@ -8184,7 +8224,7 @@ var ART = (function () {
       var q = G.active[0].q, parts = q.s.split(q.w), fs = 20 * U;
       c.font = "700 " + fs + "px " + KF;
       var a0 = c.measureText(parts[0]).width, a1 = c.measureText(q.w).width, a2 = c.measureText(parts[1]).width, tw = a0 + a1 + a2;
-      var yy = (G.input !== "key" ? H - pickPanelH() - 28 * U : H - 110 * U), xx = CX - tw / 2;
+      var yy = (G.input === "key" ? H - 110 * U : G.input === "kana" ? H - 96 * U : H - pickPanelH() - 28 * U), xx = CX - tw / 2;
       c.fillStyle = "rgba(4,8,14,.82)"; c.fillRect(xx - 16 * U, yy - 19 * U, tw + 32 * U, 38 * U);
       txt(parts[0], xx, yy, "700 " + fs + "px " + KF, "#dfeaf5");
       txt(q.w, xx + a0, yy, "900 " + fs + "px " + KF, "#ffd166");
@@ -8195,7 +8235,7 @@ var ART = (function () {
       reveal.t += dt;
       if (reveal.t > 3.2) reveal = null;
       else {
-        var rq = reveal.q, fy = (portrait ? 250 : 180) * U, RW = Math.min(W - 24, 660 * U);
+        var rq = reveal.q, fy = (portrait ? 250 : 180) * U + kOff, RW = Math.min(W - 24, 660 * U);
         c.globalAlpha = reveal.t > 2.8 ? (3.2 - reveal.t) / 0.4 : 1;
         panel(CX - RW / 2, fy - 38 * U, RW, 76 * U, "#ff5a6e");
         txt(rq.w + "  ＝  " + rq.y, CX, fy - 11 * U, "900 " + 28 * U + "px " + KF, "#fff", "center");
@@ -8292,6 +8332,8 @@ var ART = (function () {
     if (!active) return;
     gameUi.classList.toggle("pickMode", G.input === "pick");
     gameUi.classList.toggle("tileMode", G.input === "tile");
+    kanaBox.style.display = G.input === "kana" ? "flex" : "none";
+    if (kanaBad > 0) { kanaBad -= 0.016; if (kanaBad <= 0) kanaBox.classList.remove("bad"); }
     var od = document.getElementById("btnOd"), odf = document.getElementById("odFill");
     if (odf) odf.style.width = (G.od / G.odMax * 100) + "%";
     if (od) od.classList.toggle("ready", G.od >= G.odMax);
@@ -8350,6 +8392,9 @@ var ART = (function () {
     state = "game";
     hide();
     document.activeElement && document.activeElement.blur && document.activeElement.blur();
+    kanaIn.value = "";
+    if (G.input === "kana") { gameUi.style.display = "block"; kanaBox.style.display = "flex"; try { kanaIn.focus(); } catch (e) {} }
+    resize();
   }
   function themeFor(cfg) {
     if (cfg.mode === "sector") return ART.THEMES[(LL.sector(cfg.sector).no - 1) % 6];
@@ -8404,7 +8449,7 @@ var ART = (function () {
   function gradeTabs(act, cur, small) {
     return '<div class="gradeTabs' + (small ? " small" : "") + '">' + LL.GRADES.map(function (x) { return '<button data-act="' + act + '" data-g="' + x + '" class="' + (cur === x ? "on" : "") + '">' + x + "年</button>"; }).join("") + "</div>";
   }
-  function show(html, cls) { screenEl.innerHTML = html; rubyfy(screenEl); screenEl.className = "on " + (cls || ""); screenEl.scrollTop = 0; gameUi.style.display = "none"; }
+  function show(html, cls) { screenEl.innerHTML = html; rubyfy(screenEl); screenEl.className = "on " + (cls || ""); screenEl.scrollTop = 0; gameUi.style.display = "none"; if (cv.style.height) resize(); }
   function hide() { screenEl.className = ""; screenEl.innerHTML = ""; }
   function stars(n, max) { var s = ""; for (var i = 0; i < (max || 3); i++) s += '<i class="' + (i < n ? "on" : "") + '">★</i>'; return s; }
 
@@ -8568,16 +8613,17 @@ var ART = (function () {
       '<div class="brief"><div class="bL"><p class="goal"><b>めあて</b> ' + (bHas ? "この中の習った字" : "この" + s.kanji.length + "字") + "の読みを身につけて、最後のボスをおし返す。</p>" +
       '<div class="chips">' + chips + "</div>" +
       '<div class="flow">' + flow.join('<i aria-hidden="true">▶</i>') + "</div>" +
-      '<ul class="rules"><li>' + (save.input === "pick" ? "4つの中から正しい読みをえらぶと字が止まる。" : save.input === "tile" ? "読みの字を順にタッチすると字が止まる。まちがえたら、もどすでなおせる。" : "読みをローマ字で最後まで打つと字が止まる。Enter はいらない。") + "</li>" + '<li>シールドは3つ。字に通されると1つ減る。残ったシールドの数が★になる。</li><li>通された字は読みを見せて、あとでもう一度来る。</li><li>全部こわれたら、読みを確かめてからやり直せる。</li></ul>' +
+      '<ul class="rules"><li>' + (save.input === "kana" ? "読みをひらがなで書くと字が止まる。手書きの入力や、かなのキーボードが使える。" : save.input === "pick" ? "4つの中から正しい読みをえらぶと字が止まる。" : save.input === "tile" ? "読みの字を順にタッチすると字が止まる。まちがえたら、もどすでなおせる。" : "読みをローマ字で最後まで打つと字が止まる。Enter はいらない。") + "</li>" + '<li>シールドは3つ。字に通されると1つ減る。残ったシールドの数が★になる。</li><li>通された字は読みを見せて、あとでもう一度来る。</li><li>全部こわれたら、読みを確かめてからやり直せる。</li></ul>' +
       "</div>" +
       '<div class="bR"><div class="bossCard"><span class="bsc">' + ART.sceneThumb(s.no - 1) + "</span>" + ART.bossThumb(kind) + "<div><small>TARGET</small><b>" + b.name + "</b><small>" + b.en + "</small></div></div>" +
       '<div class="pickRow"><label>はやさ</label><div class="seg">' + Object.keys(LL.DIFFS).map(function (d) {
         var D = LL.DIFFS[d]; return '<button data-act="diff" data-d="' + d + '" class="' + (save.diff === d ? "on" : "") + '"><b>' + D.name + "</b><small>" + D.ja + "</small></button>";
       }).join("") + "</div></div>" +
-      '<div class="pickRow"><label>答え方</label><div class="seg three">' +
+      '<div class="pickRow"><label>答え方</label><div class="seg two inputs">' +
       '<button data-act="input" data-v="key" class="' + (save.input === "key" ? "on" : "") + '"><b>キーボード</b><small>ローマ字で打つ</small></button>' +
       '<button data-act="input" data-v="tile" class="' + (save.input === "tile" ? "on" : "") + '"><b>文字タッチ</b><small>読みの字をおす</small></button>' +
-      '<button data-act="input" data-v="pick" class="' + (save.input === "pick" ? "on" : "") + '"><b>4つから</b><small>読みをえらぶ</small></button></div></div>' +
+      '<button data-act="input" data-v="pick" class="' + (save.input === "pick" ? "on" : "") + '"><b>4つから</b><small>読みをえらぶ</small></button>' +
+      '<button data-act="input" data-v="kana" class="' + (save.input === "kana" ? "on" : "") + '"><b>ひらがなで書く</b><small>手書き・かな入力</small></button></div></div>' +
       '<button class="go" data-act="go" data-id="' + id + '">出動する</button></div></div>', "s-brief");
   }
   function howto() {
@@ -8586,6 +8632,7 @@ var ART = (function () {
       "<h3>字が来る前に読む</h3><p>おくから字が近づく。読みをローマ字で打ち切ると、字は言葉にもどる。Enter はいらない。キーボードがないときは、作戦説明の答え方で「文字タッチ」か「4つから」をえらぶ。最初の文字で一番近い字をねらう。ねらいを変えるときは Esc。</p>" +
       "<h3>作戦の流れ</h3><p>字は3つのウェーブに分かれて来る。ウェーブが進むと、同時に2方向、3方向から来る。最後にボスが来る。ボスは、読むたびにおし返せる。</p>" +
       "<h3>ギリギリほど点が高い</h3><p>目の前まで引きつけて読むと CLUTCH で点が2倍。ただし通されるとシールドが減る。5語読むごとに ACCEL が上がり、字が速くなる。通されると少し下がる。</p>" +
+      "<h3>ひらがなで書く</h3><p>作戦説明の答え方で「ひらがなで書く」をえらぶと、上のわくに読みをひらがなで書いて答えられる。タブレットの手書きの入力や、かなのキーボードが使える。読みがそろうと、Enter をおさなくても字が止まる。</p>" +
       "<h3>助けもある</h3><p>Tab か「ヒント」で、意味→はじめの字→読み、の順に見える。読みまで見た語は数えず、そのセクターの★は2つまでになる。読むたびにゲージがたまり、満タンで Space か OVERDRIVE を使うと字を遠くへおし返せる。</p>" +
       "<h3>通された字は宝物</h3><p>通された字は読みを見せて、もう一度来る。再訓練で2回続けて読めると消える。アーカイブで学年の字を全部集めよう。</p>" +
       "<h3>出る字のはんい</h3><p>タイトルの「出る字のはんい」で、教科書で習ったところまでの字だけにできる。月でも、教材でも、字を1つずつでも決められる。先生がリンクを配ると、クラスのみんなが同じはんいになる。</p>" +
@@ -8727,7 +8774,7 @@ var ART = (function () {
     },
     reset1: function () { var b = document.getElementById("resetBox"); if (b) b.innerHTML = '<p>本当に全部消す？ もどせない。</p><button class="danger" data-act="reset2">全部消す</button> <button data-act="settings">やめる</button>'; if (b) rubyfy(b); },
     reset2: function () { save = LL.newSave(); persist(); titleScreen(); },
-    resume: function () { if (G) { G.paused = false; state = "game"; hide(); } },
+    resume: function () { if (G) { G.paused = false; state = "game"; hide(); if (G.input === "kana") { try { kanaIn.focus(); } catch (e) {} resize(); } } },
     quit: function () { persist(); if (lastCfg && lastCfg.mode === "sector") mapScreen(); else titleScreen(); },
     pause: pauseScreen,
     scan: function () { if (G) LL.hint(G); },
@@ -8735,6 +8782,7 @@ var ART = (function () {
     pick: function (d) { if (G) LL.pick(G, +d.i); },
     tile: function (d) { if (G) LL.tile(G, +d.i); },
     tileBack: function () { if (G) LL.tileBack(G); },
+    kanaClear: function () { kanaIn.value = ""; try { kanaIn.focus(); } catch (e) {} },
     again: function () { if (lastCfg) begin(lastCfg); },
     setDiff: function (d) { save.diff = d.d; persist(); if (lastCfg) begin(lastCfg); },
     furi: function (d) { if (G && LL.recordFuri(G, d.c)) { persist(); var b = document.getElementById("furiBox"); if (b) { b.innerHTML = "<p>記録した。</p>"; rubyfy(b); } } }
@@ -8747,7 +8795,22 @@ var ART = (function () {
     var f = ACTIONS[t.dataset.act];
     if (f) { if (t.dataset.act !== "pick" && t.dataset.act !== "tile") SFX.ui(); f(t.dataset); }
   });
-  document.addEventListener("mousedown", function (ev) { if (ev.target.closest && ev.target.closest("#gameUi")) ev.preventDefault(); });
+  document.addEventListener("mousedown", function (ev) { if (ev.target.closest && ev.target.closest("#gameUi") && ev.target.id !== "kanaIn") ev.preventDefault(); });
+  // ---------- ひらがなで 書く ----------
+  var kanaBox = document.getElementById("kana"), kanaIn = document.getElementById("kanaIn"), kanaBad = 0;
+  // カタカナは ひらがなに、空白は 取る
+  function kanaNorm(s) { return String(s || "").replace(/[ァ-ヶ]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0x60); }).replace(/[\s　]/g, ""); }
+  function kanaTry(commit) {
+    if (!G || state !== "game" || G.input !== "kana") return;
+    var r = LL.kana(G, kanaNorm(kanaIn.value), commit);
+    if (r === "done") kanaIn.value = "";
+    else if (r === "wrong") { kanaIn.value = ""; kanaBox.classList.add("bad"); kanaBad = 0.5; }
+  }
+  kanaIn.addEventListener("input", function () { audio(); kanaTry(false); });
+  kanaIn.addEventListener("compositionend", function () { kanaTry(false); });
+  kanaIn.addEventListener("keydown", function (ev) {
+    if (ev.key === "Enter" && !ev.isComposing) { ev.preventDefault(); kanaTry(true); }
+  });
 
   // ---------- キー ----------
   function codeToChar(ev) {
@@ -8767,6 +8830,12 @@ var ART = (function () {
     audio();
     if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
     if (ev.key === "Tab") { ev.preventDefault(); LL.hint(G); return; }
+    if (G.input === "kana") {
+      // 字を 書いている 間の キーは、入力の 枠に まかせる（変換の Space で OVERDRIVE が 出ないように）
+      if (ev.key === "Escape" && !ev.isComposing) { ev.preventDefault(); pauseScreen(); }
+      else if (ev.target !== kanaIn && ev.key === " ") { ev.preventDefault(); LL.overdrive(G); }
+      return;
+    }
     if (ev.key === " " || ev.code === "Space") { ev.preventDefault(); LL.overdrive(G); return; }
     if (ev.key === "Escape") { ev.preventDefault(); if (!LL.release(G)) pauseScreen(); return; }
     if (G.input === "tile") {
