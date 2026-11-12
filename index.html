@@ -6216,7 +6216,8 @@ var LL = (function () {
     if (!s || typeof s !== "object") return d;
     Object.keys(d).forEach(function (k) { if (s[k] === undefined || s[k] === null || typeof s[k] !== typeof d[k]) s[k] = d[k]; });
     if (!LL.DIFFS[s.diff]) s.diff = "guard";
-    if (s.input !== "key" && s.input !== "pick" && s.input !== "tile" && s.input !== "kana") s.input = "key";
+    if (s.input === "kana") s.input = "tile"; // 「ひらがなで書く」は 11/12 に やめた
+    if (s.input !== "key" && s.input !== "pick" && s.input !== "tile") s.input = "key";
     if (LL.GRADES.indexOf(s.grade) < 0) s.grade = 5;
     if (Array.isArray(s.range)) s.range = {};
     Object.keys(s.range).forEach(function (g) { var r = s.range[g]; if (!LL.kanji[g] || !r || typeof r.k !== "string" || !r.k.length) delete s.range[g]; });
@@ -8619,11 +8620,10 @@ var ART = (function () {
       '<div class="pickRow"><label>はやさ</label><div class="seg">' + Object.keys(LL.DIFFS).map(function (d) {
         var D = LL.DIFFS[d]; return '<button data-act="diff" data-d="' + d + '" class="' + (save.diff === d ? "on" : "") + '"><b>' + D.name + "</b><small>" + D.ja + "</small></button>";
       }).join("") + "</div></div>" +
-      '<div class="pickRow"><label>答え方</label><div class="seg two inputs">' +
+      '<div class="pickRow"><label>答え方</label><div class="seg three">' +
       '<button data-act="input" data-v="key" class="' + (save.input === "key" ? "on" : "") + '"><b>キーボード</b><small>ローマ字で打つ</small></button>' +
       '<button data-act="input" data-v="tile" class="' + (save.input === "tile" ? "on" : "") + '"><b>文字タッチ</b><small>読みの字をおす</small></button>' +
-      '<button data-act="input" data-v="pick" class="' + (save.input === "pick" ? "on" : "") + '"><b>4つから</b><small>読みをえらぶ</small></button>' +
-      '<button data-act="input" data-v="kana" class="' + (save.input === "kana" ? "on" : "") + '"><b>ひらがなで書く</b><small>手書き・かな入力</small></button></div></div>' +
+      '<button data-act="input" data-v="pick" class="' + (save.input === "pick" ? "on" : "") + '"><b>4つから</b><small>読みをえらぶ</small></button></div></div>' +
       '<button class="go" data-act="go" data-id="' + id + '">出動する</button></div></div>', "s-brief");
   }
   function howto() {
@@ -8632,7 +8632,6 @@ var ART = (function () {
       "<h3>字が来る前に読む</h3><p>おくから字が近づく。読みをローマ字で打ち切ると、字は言葉にもどる。Enter はいらない。キーボードがないときは、作戦説明の答え方で「文字タッチ」か「4つから」をえらぶ。最初の文字で一番近い字をねらう。ねらいを変えるときは Esc。</p>" +
       "<h3>作戦の流れ</h3><p>字は3つのウェーブに分かれて来る。ウェーブが進むと、同時に2方向、3方向から来る。最後にボスが来る。ボスは、読むたびにおし返せる。</p>" +
       "<h3>ギリギリほど点が高い</h3><p>目の前まで引きつけて読むと CLUTCH で点が2倍。ただし通されるとシールドが減る。5語読むごとに ACCEL が上がり、字が速くなる。通されると少し下がる。</p>" +
-      "<h3>ひらがなで書く</h3><p>作戦説明の答え方で「ひらがなで書く」をえらぶと、上のわくに読みをひらがなで書いて答えられる。タブレットの手書きの入力や、かなのキーボードが使える。読みがそろうと、Enter をおさなくても字が止まる。</p>" +
       "<h3>助けもある</h3><p>Tab か「ヒント」で、意味→はじめの字→読み、の順に見える。読みまで見た語は数えず、そのセクターの★は2つまでになる。読むたびにゲージがたまり、満タンで Space か OVERDRIVE を使うと字を遠くへおし返せる。</p>" +
       "<h3>通された字は宝物</h3><p>通された字は読みを見せて、もう一度来る。再訓練で2回続けて読めると消える。アーカイブで学年の字を全部集めよう。</p>" +
       "<h3>出る字のはんい</h3><p>タイトルの「出る字のはんい」で、教科書で習ったところまでの字だけにできる。月でも、教材でも、字を1つずつでも決められる。先生がリンクを配ると、クラスのみんなが同じはんいになる。</p>" +
@@ -8725,7 +8724,7 @@ var ART = (function () {
     gradeMap: function (d) { chooseGrade(+d.g); mapScreen(); },
     brief: function (d) { briefScreen(d.id); },
     diff: function (d) { save.diff = d.d; persist(); briefScreen(lastBrief()); },
-    input: function (d) { save.input = d.v; persist(); briefScreen(lastBrief()); },
+    input: function (d) { if (d.v === "kana") return; save.input = d.v; persist(); briefScreen(lastBrief()); },
     go: function (d) { begin({ mode: "sector", sector: d.id }); },
     daily: function () { begin({ mode: "daily", grade: save.grade }); },
     endless: function () { begin({ mode: "endless", grade: save.grade }); },
